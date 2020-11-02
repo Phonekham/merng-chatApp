@@ -5,6 +5,8 @@ module.exports = gql`
     username: String!
     email: String!
     password: String!
+    token: String
+    createdAt: String!
   }
 
   type Query {
@@ -18,5 +20,6 @@ module.exports = gql`
       password: String!
       confirmPassword: String!
     ): User!
+    login(username: String!, password: String!): User!
   }
 `;
