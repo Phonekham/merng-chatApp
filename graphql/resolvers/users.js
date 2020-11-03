@@ -1,9 +1,9 @@
 const bcrypt = require("bcryptjs");
 const { UserInputError, AuthenticationError } = require("apollo-server");
 const jwt = require("jsonwebtoken");
+const { Op } = require("sequelize");
 
 const { User } = require("../../models");
-const { Op } = require("sequelize");
 
 module.exports = {
   Query: {
