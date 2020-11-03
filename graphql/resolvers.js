@@ -27,6 +27,28 @@ module.exports = {
         throw err;
       }
     },
+    login: async (_, args, context, info) => {
+      const { username, password } = args;
+      let errors = {};
+      try {
+        const user = await User.findOne({ where: { username } });
+        if (!user) {
+          errors.username = "user not found";
+          throw new AuthenticationError("password is incorrect", { errors });
+        }
+        const token = jwt.sign({ username }, "secretKey", {
+          expiresIn: 60 * 60,
+        });
+        user.token = token;
+        return {
+          ...user.toJSON(),
+          createdAt: user.createdAt.toISOString(),
+          token,
+        };
+      } catch (error) {
+        throw error;
+      }
+    },
   },
   Mutation: {
     register: async (_, args, context, info) => {
@@ -63,28 +85,6 @@ module.exports = {
           error.errors.forEach((e) => (errors[e.path] = e.message));
         }
         throw new UserInputError("bad input", { errors: error });
-      }
-    },
-    login: async (_, args, context, info) => {
-      const { username, password } = args;
-      let errors = {};
-      try {
-        const user = await User.findOne({ where: { username } });
-        if (!user) {
-          errors.username = "user not found";
-          throw new AuthenticationError("password is incorrect", { errors });
-        }
-        const token = jwt.sign({ username }, "secretKey", {
-          expiresIn: 60 * 60,
-        });
-        user.token = token;
-        return {
-          ...user.toJSON(),
-          createdAt: user.createdAt.toISOString(),
-          token,
-        };
-      } catch (error) {
-        throw error;
       }
     },
   },
