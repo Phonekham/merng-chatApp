@@ -41,11 +41,21 @@ module.exports = {
       const { username, password } = args;
       let errors = {};
       try {
+        if (password === "") errors.password = "password must not be empty";
+        if (Object.keys(errors).length > 0) {
+          throw new UserInputError("bad input", { errors });
+        }
         const user = await User.findOne({ where: { username } });
         if (!user) {
           errors.username = "user not found";
-          throw new AuthenticationError("password is incorrect", { errors });
+          throw new UserInputError("user not found", { errors });
         }
+        const correctPassword = await bcrypt.compare(password, user.password);
+        if (!correctPassword) {
+          errors.password = "password is incorrect";
+          throw new UserInputError("password is incorrect", { errors });
+        }
+
         const token = jwt.sign({ username }, "secretKey", {
           expiresIn: 60 * 60,
         });

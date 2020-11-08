@@ -3,7 +3,7 @@ import { Button, Col, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 
-import { useAuthDispatch } from "../context/auth";
+import { useAuthDispatch } from "../../context/auth";
 
 const GET_USERS = gql`
   query getUsers {

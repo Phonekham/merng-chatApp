@@ -6,7 +6,7 @@ import DymnamicRoute from "./utils/DynamicRoute";
 
 import ApolloProvider from "./ApolloProvider";
 import "./App.scss";
-import Home from "./pages/Home";
+import Home from "./pages/Home/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
